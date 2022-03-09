@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/bootstrap.css.map" />
+    <link href="style.css" rel="stylesheet" />
+    <title>Document</title>
+  </head>
+  <body id="picture">
+    <div class="container position-relative">
+      <div class="p-3 text-center text-light">
+        <h1 class="genos">The weather now</h1>
+      </div>
+      <div class="row align-item-center bg-white bg-opacity-25 p-4 rounded-2">
+        <div class="col-6 border-end">
+          <p class="h6"><label for="in1">Введите название города: </label></p>
+          <p>
+            <input
+              type="text"
+              class="form-control"
+              id="in1"
+              value="Rostov-na-Donu"
+            />
+          </p>
+          <p><button class="btn btn-light" onclick="find() ">НАЙТИ</button></p>
+        </div>
+        <div class="col-6">
+          <div class="d-flex justify-content-center">
+            <div class="spinner-border text-light" id="spinner" role="status">
+              <span class="visually-hidden">Загрузка...</span>
+            </div>
+          </div>
+          <div id="weather"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let spinner=document.querySelector('#spinner');
+      spinner.style.display='none';
+      async function find() {
+        spinner.style.display='block';
+        let sity = document.querySelector("#in1").value;
+        let url = `http://api.openweathermap.org/data/2.5/weather?q=${sity}%20&limit=1&appid=1688fc61c22992165fe80f694ad6ae31`;
+        document.querySelector(
+          "#weather"
+        ).innerHTML = `<p class="h6">Погода для города: ${sity} `;
+        let textWeather = "";
+        try {
+          let response = await fetch(url);
+          if (response.status === 404) {
+            throw "По вашему запросу ничего не найдено";
+          }
+          const weather = await response.json();
+          console.log(weather);
+
+          textWeather += `<p>Температура: ${Math.round(
+            weather.main.temp - 273.15
+          )} °C</p>`;
+          textWeather += `<p>Ощущается как: ${Math.round(
+            weather.main.feels_like - 273.15
+          )} °C</p>`;
+          textWeather += `<p>Влажность: ${weather.main.humidity} %</p>`;
+          textWeather += `<p>Давление: ${Math.round(
+            (weather.main.pressure * 750064) / 1000000
+          )} мм рт ст</p>`;
+          textWeather += `<p>Скорость ветра: ${Math.round(
+            weather.wind.speed
+          )} м/с</p>`;
+
+          textWeather += `<p>Направление ветра: ${getWind(
+            weather.wind.deg
+          )} </p>`;
+        } catch (err) {
+          textWeather = `<p>${err}</p>`;
+        }
+        spinner.style.display='none';
+        document.querySelector("#weather").innerHTML += textWeather;
+      }
+
+      function getWind(directionWind) {
+        let oneSize = 22.5;
+        let wind = directionWind + oneSize / 2;
+        wind = wind >= 360 ? (360 - wind) * -1 : wind;
+        let sides = [
+          "С",
+          "ССВ",
+          "СВ",
+          "ВСВ",
+          "В",
+          "ВЮВ",
+          "ЮВ",
+          "ЮЮВ",
+          "Ю",
+          "ЮЮЗ",
+          "ЮЗ",
+          "ЗЮЗ",
+          "З",
+          "ЗСЗ",
+          "СЗ",
+          "ССЗ",
+        ];
+        return sides[Math.floor(wind / oneSize)];
+      }
+    </script>
+    <script src="js/bootstrap.bundle.js"></script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+/* Импорт шрифта */
+@import url("https://fonts.googleapis.com/css2?family=Genos&display=swap");
+.genos {
+  font-family: "Genos", sans-serif;
+}
+
+#picture {
+  background: url(img/i.jpg) no-repeat fixed center center;
+  background-size: cover;
+  height: auto;
+}
+.row {
+  min-height: 20em;
+  margin-top: 3em;
+}
+#spinner {
+  position: absolute;
+  margin-top: 7em;
+}
