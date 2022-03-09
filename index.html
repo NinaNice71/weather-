@@ -44,7 +44,7 @@
       async function find() {
         spinner.style.display='block';
         let sity = document.querySelector("#in1").value;
-        let url = `http://api.openweathermap.org/data/2.5/weather?q=${sity}%20&limit=1&appid=1688fc61c22992165fe80f694ad6ae31`;
+        let url = `https://api.openweathermap.org/data/2.5/weather?q=${sity}%20&limit=1&appid=1688fc61c22992165fe80f694ad6ae31`;
         document.querySelector(
           "#weather"
         ).innerHTML = `<p class="h6">Погода для города: ${sity} `;
